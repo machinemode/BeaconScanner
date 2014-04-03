@@ -1,0 +1,23 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.machinemode.beaconscanner.ui.MainActivity" >
+
+    <fragment
+        android:id="@+id/beacon_list"
+        android:name="com.machinemode.beaconscanner.ui.BeaconListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout="@android:layout/list_content"
+        android:layout_above="@+id/scanButton"/>
+
+    <Button
+        android:id="@+id/scanButton"
+        android:text="@string/scan_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"/>
+</RelativeLayout>
