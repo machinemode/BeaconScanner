@@ -8,15 +8,15 @@ import android.os.IBinder;
 
 public class GattService extends Service
 {
-    public class LocalBinder extends Binder
+    public class GattServiceBinder extends Binder
     {
-        GattService getService()
+        public GattService getService()
         {
             return GattService.this;
         }
     }
 
-    private final IBinder binder = new LocalBinder();
+    private final IBinder binder = new GattServiceBinder();
     private BluetoothGatt bluetoothGatt;
 
     @Override
@@ -30,6 +30,16 @@ public class GattService extends Service
     {
         close();
         return super.onUnbind(intent);
+    }
+
+    public void connect(String address)
+    {
+
+    }
+
+    public void disconnect()
+    {
+
     }
 
     public void close()

@@ -10,22 +10,19 @@ import android.widget.TextView;
 import com.machinemode.beaconscanner.R;
 import com.machinemode.beaconscanner.model.Beacon;
 
-import java.util.List;
-
 public class BeaconAdapter extends ArrayAdapter<Beacon>
 {
     private LayoutInflater inflater;
-    private List<Beacon> beacons;
 
     static class ViewHolder
     {
+        TextView name;
         TextView address;
     }
 
-    public BeaconAdapter(Context context, int resource, List<Beacon> objects)
+    public BeaconAdapter(Context context, int resource)
     {
-        super(context, resource, objects);
-        beacons = objects;
+        super(context, resource);
         inflater = LayoutInflater.from(getContext());
     }
 
@@ -38,6 +35,7 @@ public class BeaconAdapter extends ArrayAdapter<Beacon>
         {
             viewHolder = new ViewHolder();
             convertView = inflater.inflate(R.layout.beacon_item, parent, false);
+            viewHolder.name = (TextView) convertView.findViewById(R.id.name);
             viewHolder.address = (TextView) convertView.findViewById(R.id.address);
             convertView.setTag(viewHolder);
         }
@@ -46,7 +44,8 @@ public class BeaconAdapter extends ArrayAdapter<Beacon>
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.address.setText(beacons.get(position).getAddress());
+        viewHolder.name.setText(getItem(position).getName());
+        viewHolder.address.setText(getItem(position).getAddress());
         return convertView;
     }
 }

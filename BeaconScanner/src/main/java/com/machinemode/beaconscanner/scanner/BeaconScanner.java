@@ -16,6 +16,7 @@ public final class BeaconScanner
     private BluetoothAdapter bluetoothAdapter;
     private Handler handler;
     private Context context;
+    private boolean scanning;
 
     private BluetoothAdapter.LeScanCallback scanCallback;
 
@@ -49,6 +50,11 @@ public final class BeaconScanner
 
     public void scan()
     {
+        if (scanning)
+        {
+            return;
+        }
+
         handler.postDelayed(new Runnable()
         {
             @Override
@@ -56,10 +62,12 @@ public final class BeaconScanner
             {
                 Log.d(TAG, "Scan stopped");
                 bluetoothAdapter.stopLeScan(scanCallback);
+                scanning = false;
             }
         }, SCAN_PERIOD);
 
         Log.d(TAG, "Scan started");
-        bluetoothAdapter.startLeScan(scanCallback);
+
+        scanning = bluetoothAdapter.startLeScan(scanCallback);
     }
 }
