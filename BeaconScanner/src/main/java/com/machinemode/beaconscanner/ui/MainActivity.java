@@ -20,14 +20,18 @@ import com.machinemode.beaconscanner.scanner.BeaconScanner;
 import com.machinemode.beaconscanner.scanner.GattService;
 import com.machinemode.beaconscanner.util.ByteConverter;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends Activity implements BluetoothAdapter.LeScanCallback,
-                                                      ServiceConnection
+                                                      ServiceConnection,
+                                                      BeaconListFragment.OnBeaconSelectedListener
 {
     private static final int ENABLE_BT_REQUEST = 0;
     private BeaconAdapter beaconAdapter;
+    private List<Beacon> scanResults = new ArrayList<Beacon>();
     private Set<Beacon> beaconSet = new LinkedHashSet<Beacon>();
     private BeaconScanner beaconScanner;
     private GattService gattService;
@@ -45,7 +49,15 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
             }
             else
             {
-                beaconScanner.scan();
+                if (!beaconScanner.isScanning())
+                {
+                    scanResults.clear();
+                    for (Beacon beacon : beaconSet)
+                    {
+                        beacon.setActive(false);
+                    }
+                    beaconScanner.scan();
+                }
             }
         }
     };
@@ -56,13 +68,20 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
         super.onCreate(savedInstanceState);
         beaconAdapter = new BeaconAdapter(this, 0);
         beaconScanner = new BeaconScanner(this);
-        setContentView(R.layout.activity_main);
-        bindViews();
 
         if (!beaconScanner.isBluetoothLeSupported())
         {
             Log.d("MainActivity", "No Bluetooth LE support");
         }
+
+        if (savedInstanceState != null)
+        {
+            List<Beacon> beaconList = savedInstanceState.getParcelableArrayList("beacons");
+            beaconSet.addAll(beaconList);
+            beaconAdapter.addAll(beaconSet);
+        }
+        setContentView(R.layout.activity_main);
+        bindViews();
     }
 
     @Override
@@ -96,6 +115,14 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        ArrayList<Beacon> beaconList = new ArrayList<Beacon>(beaconSet);
+        outState.putParcelableArrayList("beacons", beaconList);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public void onLeScan(final BluetoothDevice device, final int rssi, final byte[] scanRecord)
     {
         runOnUiThread(new Runnable()
@@ -103,11 +130,14 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
             @Override
             public void run()
             {
-                if (beaconSet.add(Beacon.newInstance(device, rssi, scanRecord)))
-                {
-                    Log.d("MainActivity", ByteConverter.toHex(scanRecord));
+                Beacon foundBeacon = Beacon.newInstance(device, rssi, scanRecord);
+                scanResults.add(foundBeacon);
 
-                    // Only is UUIDs are cached:
+                if (beaconSet.add(foundBeacon))
+                {
+                    Log.d("MainActivity", ByteConverter.toHex(foundBeacon.getScanRecord()));
+
+                    // Only if UUIDs are cached:
                     ParcelUuid uuids[] = device.getUuids();
                     if (uuids != null)
                     {
@@ -118,8 +148,21 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
                     }
                     beaconAdapter.clear();
                     beaconAdapter.addAll(beaconSet);
-                    beaconAdapter.notifyDataSetChanged();
                 }
+                else
+                {
+                    for (Beacon beacon : beaconSet)
+                    {
+                        if (foundBeacon.equals(beacon))
+                        {
+                            beacon.setRssi(foundBeacon.getRssi());
+                            beacon.setActive(true);
+                            break;
+                        }
+                    }
+                }
+
+                beaconAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -135,6 +178,13 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
     public void onServiceDisconnected(ComponentName name)
     {
 
+    }
+
+    @Override
+    public void onBeaconSelected(int position)
+    {
+        Beacon beacon = beaconAdapter.getItem(position);
+        gattService.connect(beacon.getDevice());
     }
 
     private void bindViews()

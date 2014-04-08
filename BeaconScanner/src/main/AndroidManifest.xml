@@ -26,13 +26,13 @@
 
         <service
             android:name="com.machinemode.beaconscanner.scanner.GattService"
-            android:enabled="false"
+            android:enabled="true"
             android:exported="false" >
         </service>
 
         <receiver
             android:name="com.machinemode.beaconscanner.scanner.GattReceiver"
-            android:enabled="false"
+            android:enabled="true"
             android:exported="false" >
         </receiver>
     </application>

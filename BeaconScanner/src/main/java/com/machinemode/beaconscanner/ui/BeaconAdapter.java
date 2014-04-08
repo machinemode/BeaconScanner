@@ -18,6 +18,7 @@ public class BeaconAdapter extends ArrayAdapter<Beacon>
     {
         TextView name;
         TextView address;
+        TextView rssi;
     }
 
     public BeaconAdapter(Context context, int resource)
@@ -37,6 +38,7 @@ public class BeaconAdapter extends ArrayAdapter<Beacon>
             convertView = inflater.inflate(R.layout.beacon_item, parent, false);
             viewHolder.name = (TextView) convertView.findViewById(R.id.name);
             viewHolder.address = (TextView) convertView.findViewById(R.id.address);
+            viewHolder.rssi = (TextView) convertView.findViewById(R.id.rssi);
             convertView.setTag(viewHolder);
         }
         else
@@ -46,6 +48,9 @@ public class BeaconAdapter extends ArrayAdapter<Beacon>
 
         viewHolder.name.setText(getItem(position).getName());
         viewHolder.address.setText(getItem(position).getAddress());
+        viewHolder.rssi.setText(String.valueOf(getItem(position).getRssi()));
+        viewHolder.rssi.setEnabled(getItem(position).isActive());
+        //convertView.setEnabled(getItem(position).isActive());
         return convertView;
     }
 }

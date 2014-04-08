@@ -70,4 +70,9 @@ public final class BeaconScanner
 
         scanning = bluetoothAdapter.startLeScan(scanCallback);
     }
+
+    public boolean isScanning()
+    {
+        return scanning;
+    }
 }
