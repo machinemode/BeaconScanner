@@ -47,7 +47,7 @@ public class BeaconAdapter extends ArrayAdapter<Beacon>
         }
 
         viewHolder.name.setText(getItem(position).getName());
-        viewHolder.address.setText(getItem(position).getAddress());
+        viewHolder.address.setText(getItem(position).getDevice().getAddress());
         viewHolder.rssi.setText(String.valueOf(getItem(position).getRssi()));
         viewHolder.rssi.setEnabled(getItem(position).isActive());
         //convertView.setEnabled(getItem(position).isActive());

@@ -56,6 +56,11 @@ public class Beacon implements Parcelable
         return device;
     }
 
+    public void setDevice(BluetoothDevice device)
+    {
+        this.device = device;
+    }
+
     public String getName()
     {
         if (device.getName() != null)
@@ -63,11 +68,6 @@ public class Beacon implements Parcelable
             return device.getName();
         }
         return "unknown";
-    }
-
-    public String getAddress()
-    {
-        return device.getAddress();
     }
 
     public int getRssi()
@@ -126,16 +126,14 @@ public class Beacon implements Parcelable
 
         Beacon lhs = (Beacon) o;
 
-        return (device == null ? lhs.device == null : device.equals(lhs.device))
-               //&& (rssi == lhs.rssi)
-               && (Arrays.equals(scanRecord, lhs.scanRecord));
+        return Arrays.equals(scanRecord, lhs.scanRecord);
     }
 
     @Override
     public int hashCode()
     {
         int result = 17;
-        result = 31 * result + (device == null ? 0 : device.hashCode());
+        //result = 31 * result + (device == null ? 0 : device.hashCode());
         //result = 31 * result + rssi;
         result = 31 * result + (Arrays.hashCode(scanRecord));
         return result;

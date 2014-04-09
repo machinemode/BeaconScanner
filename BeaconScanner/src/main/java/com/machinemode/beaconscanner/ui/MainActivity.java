@@ -155,6 +155,7 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
                     {
                         if (foundBeacon.equals(beacon))
                         {
+                            beacon.setDevice(foundBeacon.getDevice());
                             beacon.setRssi(foundBeacon.getRssi());
                             beacon.setActive(true);
                             break;
