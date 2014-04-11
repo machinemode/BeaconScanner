@@ -62,6 +62,7 @@ public final class BeaconScanner
             {
                 Log.d(TAG, "Scan stopped");
                 bluetoothAdapter.stopLeScan(scanCallback);
+
                 scanning = false;
             }
         }, SCAN_PERIOD);

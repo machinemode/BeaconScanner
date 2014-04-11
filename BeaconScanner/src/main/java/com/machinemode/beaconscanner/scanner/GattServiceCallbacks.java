@@ -4,9 +4,17 @@ import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
+import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.util.Log;
 
+import com.machinemode.beaconscanner.util.ByteConverter;
+
+import java.util.List;
+
+/**
+ * https://www.bluetooth.org/en-us/specification/assigned-numbers
+ */
 public class GattServiceCallbacks extends BluetoothGattCallback
 {
     private static final String TAG = GattServiceCallbacks.class.getSimpleName();
@@ -22,10 +30,21 @@ public class GattServiceCallbacks extends BluetoothGattCallback
         Log.d(TAG, "onCharacteristicChanged");
     }
 
+    /**
+     * https://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicsHome.aspx
+     * @param gatt
+     * @param characteristic
+     * @param status
+     */
     @Override
     public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status)
     {
         Log.d(TAG, "onCharacteristicRead: status = " + getStatus(status));
+
+        if (status == BluetoothGatt.GATT_SUCCESS)
+        {
+            Log.d(TAG, ByteConverter.toHex(characteristic.getValue()));
+        }
     }
 
     @Override
@@ -46,6 +65,7 @@ public class GattServiceCallbacks extends BluetoothGattCallback
                 case BluetoothProfile.STATE_DISCONNECTED:
                     break;
                 case BluetoothProfile.STATE_CONNECTED:
+                    Log.d(TAG, "Attempt to discover services: " + gatt.discoverServices());
                     break;
                 default:
                     // Do nothing
@@ -81,6 +101,21 @@ public class GattServiceCallbacks extends BluetoothGattCallback
     public void onServicesDiscovered(BluetoothGatt gatt, int status)
     {
         Log.d(TAG, "onServicesDiscovered: status = " + getStatus(status));
+
+        if (status == BluetoothGatt.GATT_SUCCESS)
+        {
+            List<BluetoothGattService> services = gatt.getServices();
+            for (BluetoothGattService service : services)
+            {
+                Log.d(TAG, "Service UUID: " + service.getUuid().toString());
+                List<BluetoothGattCharacteristic> characteristics = service.getCharacteristics();
+                for (BluetoothGattCharacteristic characteristic : characteristics)
+                {
+                    Log.d(TAG, "Characteristic UUID: " + characteristic.getUuid().toString());
+                    Log.d(TAG, "Attempt to read characteristic: " + gatt.readCharacteristic(characteristic));
+                }
+            }
+        }
     }
 
     private String getStatus(int status)
