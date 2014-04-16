@@ -17,6 +17,7 @@ import android.widget.Button;
 import com.machinemode.beaconscanner.R;
 import com.machinemode.beaconscanner.model.Beacon;
 import com.machinemode.beaconscanner.scanner.BeaconScanner;
+import com.machinemode.beaconscanner.scanner.Gap;
 import com.machinemode.beaconscanner.scanner.GattService;
 import com.machinemode.beaconscanner.util.ByteConverter;
 
@@ -136,16 +137,8 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
                 if (beaconSet.add(foundBeacon))
                 {
                     Log.d("MainActivity", ByteConverter.toHex(foundBeacon.getScanRecord()));
+                    List<Gap.Data> dataList = Gap.parseScanRecord(scanRecord);
 
-                    // Only if UUIDs are cached:
-                    ParcelUuid uuids[] = device.getUuids();
-                    if (uuids != null)
-                    {
-                        for (int i = 0; i < uuids.length; ++i)
-                        {
-                            Log.d("UUID", uuids[i].toString());
-                        }
-                    }
                     beaconAdapter.clear();
                     beaconAdapter.addAll(beaconSet);
                 }
