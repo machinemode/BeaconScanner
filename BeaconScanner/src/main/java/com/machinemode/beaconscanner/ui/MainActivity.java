@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.ParcelUuid;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,7 +16,7 @@ import android.widget.Button;
 import com.machinemode.beaconscanner.R;
 import com.machinemode.beaconscanner.model.Beacon;
 import com.machinemode.beaconscanner.scanner.BeaconScanner;
-import com.machinemode.beaconscanner.scanner.Gap;
+import com.machinemode.beaconscanner.scanner.GapParser;
 import com.machinemode.beaconscanner.scanner.GattService;
 import com.machinemode.beaconscanner.util.ByteConverter;
 
@@ -131,14 +130,12 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
             @Override
             public void run()
             {
-                Beacon foundBeacon = Beacon.newInstance(device, rssi, scanRecord);
+                Beacon foundBeacon = new Beacon(GapParser.parseScanRecord(scanRecord), rssi);
                 scanResults.add(foundBeacon);
 
                 if (beaconSet.add(foundBeacon))
                 {
-                    Log.d("MainActivity", ByteConverter.toHex(foundBeacon.getScanRecord()));
-                    List<Gap.Data> dataList = Gap.parseScanRecord(scanRecord);
-
+                    Log.d("MainActivity", ByteConverter.toHex(scanRecord));
                     beaconAdapter.clear();
                     beaconAdapter.addAll(beaconSet);
                 }
@@ -148,7 +145,6 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
                     {
                         if (foundBeacon.equals(beacon))
                         {
-                            beacon.setDevice(foundBeacon.getDevice());
                             beacon.setRssi(foundBeacon.getRssi());
                             beacon.setActive(true);
                             break;
@@ -178,7 +174,7 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
     public void onBeaconSelected(int position)
     {
         Beacon beacon = beaconAdapter.getItem(position);
-        gattService.connect(beacon.getDevice());
+        //gattService.connect(beacon.getDevice());
     }
 
     private void bindViews()

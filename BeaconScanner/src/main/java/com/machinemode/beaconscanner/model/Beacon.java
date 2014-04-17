@@ -4,14 +4,21 @@ import android.bluetooth.BluetoothDevice;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.Arrays;
+import com.machinemode.beaconscanner.scanner.GapParser;
+
+import java.util.List;
 
 public class Beacon implements Parcelable
 {
-    private BluetoothDevice device;
+    private List<ResponseData> responseDataList;
     private int rssi;
-    private byte[] scanRecord;
     private boolean active;
+
+    // decoded from responseData
+    private List<String> flags;
+    private String localName = "unknown";
+    private short txPowerLevel;
+    //private List<String> uuids;
 
     private static final Creator<Beacon> CREATOR = new Creator<Beacon>()
     {
@@ -28,46 +35,19 @@ public class Beacon implements Parcelable
         }
     };
 
-    public Beacon()
+    public Beacon(List<ResponseData> responseDataList, int rssi)
     {
-
+        this.responseDataList = responseDataList;
+        this.rssi = rssi;
+        this.active = true;
+        decodeResponseData();
     }
 
     public Beacon(Parcel source)
     {
-        device = source.readParcelable(BluetoothDevice.class.getClassLoader());
         rssi = source.readInt();
-        source.readByteArray(scanRecord);
+        source.readTypedList(responseDataList, ResponseData.CREATOR);
         active = source.readByte() != 0;
-    }
-
-    public static Beacon newInstance(BluetoothDevice device, int rssi, byte[] scanRecord)
-    {
-        Beacon beacon = new Beacon();
-        beacon.device = device;
-        beacon.rssi = rssi;
-        beacon.scanRecord = scanRecord;
-        beacon.active = true;
-        return beacon;
-    }
-
-    public BluetoothDevice getDevice()
-    {
-        return device;
-    }
-
-    public void setDevice(BluetoothDevice device)
-    {
-        this.device = device;
-    }
-
-    public String getName()
-    {
-        if (device.getName() != null)
-        {
-            return device.getName();
-        }
-        return "unknown";
     }
 
     public int getRssi()
@@ -80,11 +60,6 @@ public class Beacon implements Parcelable
         this.rssi = rssi;
     }
 
-    public byte[] getScanRecord()
-    {
-        return scanRecord;
-    }
-
     public boolean isActive()
     {
         return active;
@@ -93,6 +68,40 @@ public class Beacon implements Parcelable
     public void setActive(boolean active)
     {
         this.active = active;
+    }
+
+    public List<String> getFlags()
+    {
+        return flags;
+    }
+
+    public short getTxPowerLevel()
+    {
+        return txPowerLevel;
+    }
+
+    public String getLocalName()
+    {
+        return localName;
+    }
+
+    private void decodeResponseData()
+    {
+        for (ResponseData responseData : responseDataList)
+        {
+            switch (responseData.getType())
+            {
+                case 0x01:
+                    flags = GapParser.decodeFlags(responseData.getData()[0]);
+                    break;
+                case 0x0A:
+                    txPowerLevel = GapParser.decodeTxPowerLevel(responseData.getData()[0]);
+                    break;
+                case 0x09:
+                    localName = GapParser.decodeLocalName(responseData.getData());
+                    break;
+            }
+        }
     }
 
     @Override
@@ -105,9 +114,8 @@ public class Beacon implements Parcelable
     @Override
     public void writeToParcel(Parcel dest, int flags)
     {
-        dest.writeParcelable(device, 0);
         dest.writeInt(rssi);
-        dest.writeByteArray(scanRecord);
+        dest.writeTypedList(responseDataList);
         dest.writeByte((byte)(active ? 1 : 0));
     }
 
@@ -126,16 +134,14 @@ public class Beacon implements Parcelable
 
         Beacon lhs = (Beacon) o;
 
-        return Arrays.equals(scanRecord, lhs.scanRecord);
+        return (responseDataList == null ? lhs.responseDataList == null : responseDataList.equals(lhs.responseDataList));
     }
 
     @Override
     public int hashCode()
     {
         int result = 17;
-        //result = 31 * result + (device == null ? 0 : device.hashCode());
-        //result = 31 * result + rssi;
-        result = 31 * result + (Arrays.hashCode(scanRecord));
+        result = 31 * result + (responseDataList == null ? 0 : responseDataList.hashCode());
         return result;
     }
 }
