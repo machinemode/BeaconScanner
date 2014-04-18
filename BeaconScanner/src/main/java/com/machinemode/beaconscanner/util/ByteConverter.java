@@ -16,4 +16,21 @@ public final class ByteConverter
 
         return new String(hexChars);
     }
+
+    public static String toHex(byte b)
+    {
+        byte[] bytes = new byte[] { b };
+        return toHex(bytes);
+    }
+
+    public static short toShort(byte lhs, byte rhs)
+    {
+        return (short) ((rhs << 8) | lhs);
+    }
+
+    public static int toUnsigned(byte lhs, byte rhs)
+    {
+        // TODO: Fix
+        return (rhs << 8) | lhs;
+    }
 }

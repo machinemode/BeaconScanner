@@ -5,12 +5,15 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.machinemode.beaconscanner.scanner.GapParser;
+import com.machinemode.beaconscanner.scanner.ManufacturerDataParser;
 
 import java.util.List;
+import java.util.Map;
 
 public class Beacon implements Parcelable
 {
     private List<ResponseData> responseDataList;
+    private int octets;
     private int rssi;
     private boolean active;
 
@@ -18,7 +21,8 @@ public class Beacon implements Parcelable
     private List<String> flags;
     private String localName = "unknown";
     private short txPowerLevel;
-    //private List<String> uuids;
+    private String serviceClassUuids;
+    private Map<String, String> manufacturerData;
 
     private static final Creator<Beacon> CREATOR = new Creator<Beacon>()
     {
@@ -35,9 +39,10 @@ public class Beacon implements Parcelable
         }
     };
 
-    public Beacon(List<ResponseData> responseDataList, int rssi)
+    public Beacon(List<ResponseData> responseDataList, int octets, int rssi)
     {
         this.responseDataList = responseDataList;
+        this.octets = octets;
         this.rssi = rssi;
         this.active = true;
         decodeResponseData();
@@ -45,9 +50,15 @@ public class Beacon implements Parcelable
 
     public Beacon(Parcel source)
     {
-        rssi = source.readInt();
         source.readTypedList(responseDataList, ResponseData.CREATOR);
+        octets = source.readInt();
+        rssi = source.readInt();
         active = source.readByte() != 0;
+    }
+
+    public int getOctets()
+    {
+        return octets;
     }
 
     public int getRssi()
@@ -89,17 +100,27 @@ public class Beacon implements Parcelable
     {
         for (ResponseData responseData : responseDataList)
         {
-            switch (responseData.getType())
+            byte type = responseData.getType();
+
+            if (type == (byte)0x01)
             {
-                case 0x01:
-                    flags = GapParser.decodeFlags(responseData.getData()[0]);
-                    break;
-                case 0x0A:
-                    txPowerLevel = GapParser.decodeTxPowerLevel(responseData.getData()[0]);
-                    break;
-                case 0x09:
-                    localName = GapParser.decodeLocalName(responseData.getData());
-                    break;
+                flags = GapParser.decodeFlags(responseData.getData()[0]);
+            }
+            else if (type >= (byte)0x02 && type <= (byte)0x07)
+            {
+                serviceClassUuids = GapParser.decodeUUID(responseData.getData());
+            }
+            else if (type == (byte)0x08 || type == (byte)0x09)
+            {
+                localName = GapParser.decodeLocalName(responseData.getData());
+            }
+            else if (type == (byte)0x0A)
+            {
+                txPowerLevel = GapParser.decodeTxPowerLevel(responseData.getData()[0]);
+            }
+            else if (type == (byte)0xFF)
+            {
+                manufacturerData = ManufacturerDataParser.decodeData(responseData.getData());
             }
         }
     }
@@ -114,8 +135,9 @@ public class Beacon implements Parcelable
     @Override
     public void writeToParcel(Parcel dest, int flags)
     {
-        dest.writeInt(rssi);
         dest.writeTypedList(responseDataList);
+        dest.writeInt(octets);
+        dest.writeInt(rssi);
         dest.writeByte((byte)(active ? 1 : 0));
     }
 

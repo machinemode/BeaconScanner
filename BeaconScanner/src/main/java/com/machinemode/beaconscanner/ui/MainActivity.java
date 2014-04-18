@@ -130,7 +130,7 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
             @Override
             public void run()
             {
-                Beacon foundBeacon = new Beacon(GapParser.parseScanRecord(scanRecord), rssi);
+                Beacon foundBeacon = new Beacon(GapParser.parseScanRecord(scanRecord), scanRecord.length, rssi);
                 scanResults.add(foundBeacon);
 
                 if (beaconSet.add(foundBeacon))
