@@ -3,6 +3,11 @@ package com.machinemode.beaconscanner.util;
 public final class ByteConverter
 {
     private static final char[] HEX_VALUE = "0123456789ABCDEF".toCharArray();
+    public static enum Endian
+    {
+        LITTLE,
+        BIG
+    }
 
     public static String toHex(byte[] bytes)
     {
@@ -23,14 +28,41 @@ public final class ByteConverter
         return toHex(bytes);
     }
 
-    public static short toShort(byte lhs, byte rhs)
+    public static char toUnsignedShort(byte lhs, byte rhs, Endian endian)
     {
-        return (short) ((rhs << 8) | lhs);
+        char left = (char)(lhs & 0x00FF);
+        char right = (char)(rhs & 0x00FF);
+
+        switch (endian)
+        {
+            case LITTLE:
+                return (char) ((right << 8) | left);
+            default: //case BIG:
+                return (char) ((left << 8) | right);
+        }
     }
 
-    public static int toUnsigned(byte lhs, byte rhs)
+    public static char toUnsignedShort(byte lhs, byte rhs)
     {
-        // TODO: Fix
-        return (rhs << 8) | lhs;
+        return toUnsignedShort(lhs, rhs, Endian.BIG);
+    }
+
+    public static int toUnsignedInt(byte lhs, byte rhs, Endian endian)
+    {
+        char left = (char)(lhs & 0x00FF);
+        char right = (char)(rhs & 0x00FF);
+
+        switch (endian)
+        {
+            case LITTLE:
+                return (char) ((right << 8) | left);
+            default: //case BIG:
+                return (char) ((left << 8) | right);
+        }
+    }
+
+    public static int toUnsignedInt(byte lhs, byte rhs)
+    {
+        return toUnsignedInt(lhs, rhs, Endian.BIG);
     }
 }

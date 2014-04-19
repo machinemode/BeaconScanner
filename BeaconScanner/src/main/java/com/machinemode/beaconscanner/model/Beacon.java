@@ -1,19 +1,19 @@
 package com.machinemode.beaconscanner.model;
 
-import android.bluetooth.BluetoothDevice;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.machinemode.beaconscanner.scanner.GapParser;
 import com.machinemode.beaconscanner.scanner.ManufacturerDataParser;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 public class Beacon implements Parcelable
 {
+    private byte[] scanRecord;
     private List<ResponseData> responseDataList;
-    private int octets;
     private int rssi;
     private boolean active;
 
@@ -39,10 +39,10 @@ public class Beacon implements Parcelable
         }
     };
 
-    public Beacon(List<ResponseData> responseDataList, int octets, int rssi)
+    public Beacon(byte[] scanRecord, int rssi)
     {
-        this.responseDataList = responseDataList;
-        this.octets = octets;
+        this.scanRecord = scanRecord;
+        this.responseDataList = GapParser.parseScanRecord(scanRecord);
         this.rssi = rssi;
         this.active = true;
         decodeResponseData();
@@ -50,15 +50,15 @@ public class Beacon implements Parcelable
 
     public Beacon(Parcel source)
     {
+        source.readByteArray(scanRecord);
         source.readTypedList(responseDataList, ResponseData.CREATOR);
-        octets = source.readInt();
         rssi = source.readInt();
         active = source.readByte() != 0;
     }
 
-    public int getOctets()
+    public byte[] getScanRecord()
     {
-        return octets;
+        return scanRecord;
     }
 
     public int getRssi()
@@ -94,6 +94,11 @@ public class Beacon implements Parcelable
     public String getLocalName()
     {
         return localName;
+    }
+
+    public Map<String, String> getManufacturerData()
+    {
+        return manufacturerData;
     }
 
     private void decodeResponseData()
@@ -135,8 +140,8 @@ public class Beacon implements Parcelable
     @Override
     public void writeToParcel(Parcel dest, int flags)
     {
+        dest.writeByteArray(scanRecord);
         dest.writeTypedList(responseDataList);
-        dest.writeInt(octets);
         dest.writeInt(rssi);
         dest.writeByte((byte)(active ? 1 : 0));
     }
@@ -156,14 +161,14 @@ public class Beacon implements Parcelable
 
         Beacon lhs = (Beacon) o;
 
-        return (responseDataList == null ? lhs.responseDataList == null : responseDataList.equals(lhs.responseDataList));
+        return Arrays.equals(scanRecord, lhs.scanRecord);
     }
 
     @Override
     public int hashCode()
     {
         int result = 17;
-        result = 31 * result + (responseDataList == null ? 0 : responseDataList.hashCode());
+        result = 31 * result + (Arrays.hashCode(scanRecord));
         return result;
     }
 }
