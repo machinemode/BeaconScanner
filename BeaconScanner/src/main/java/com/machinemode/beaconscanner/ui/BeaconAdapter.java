@@ -61,17 +61,38 @@ public class BeaconAdapter extends ArrayAdapter<Beacon>
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        // TODO: make labels separate and use monospaced text for values
         viewHolder.manufacturer.setText(manufacturerData.get(ManufacturerDataParser.COMPANY_IDENTIFIER));
-        viewHolder.rssi.setText(String.valueOf(beacon.getRssi()));
-        viewHolder.rssi.setEnabled(beacon.isActive());
-        viewHolder.name.setText("Name: " + beacon.getLocalName());
-        viewHolder.uuid.setText("UUID: " + manufacturerData.get(ManufacturerDataParser.AppleData.UUID));
-        viewHolder.major.setText("Major: " + manufacturerData.get(ManufacturerDataParser.AppleData.MAJOR));
-        viewHolder.minor.setText("Minor: " + manufacturerData.get(ManufacturerDataParser.AppleData.MINOR));
-        viewHolder.tx.setText("Tx Power: " + manufacturerData.get(ManufacturerDataParser.AppleData.TX) + " dB");
+        viewHolder.rssi.setText(String.valueOf(beacon.getRssi()) + " dBm");
+        viewHolder.rssi.setBackgroundColor(rssiToColor(beacon.getRssi()));
+
+        viewHolder.name.setText(beacon.getLocalName());
+        viewHolder.uuid.setText(manufacturerData.get(ManufacturerDataParser.AppleData.UUID));
+        viewHolder.major.setText(manufacturerData.get(ManufacturerDataParser.AppleData.MAJOR));
+        viewHolder.minor.setText(manufacturerData.get(ManufacturerDataParser.AppleData.MINOR));
+        viewHolder.tx.setText(manufacturerData.get(ManufacturerDataParser.AppleData.TX) + " dBm");
 
         //convertView.setEnabled(getItem(position).isActive());
         return convertView;
+    }
+
+    /**
+     * 0 = no rssi available
+     * -1 = near, -100 = far
+     * @param rssi
+     * @return #aarrggbb
+     */
+    private int rssiToColor(int rssi)
+    {
+        /*
+         red   = 0xFF00 = 65280
+         green = 0x00FF = 255
+         y = mx + b
+         m = (99/65025)
+         y = (99/65025)x + b
+         255 = (99/65025)(-1) + b
+         255 + (99/65025) = b
+
+         */
+        return 0xFF000000 | (((99/65025) * rssi) + (255 + (99/65025)) << 8);
     }
 }

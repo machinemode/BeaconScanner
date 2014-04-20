@@ -7,13 +7,26 @@
               android:baselineAligned="false"
               android:gravity="center_vertical">
 
-    <TextView
-        android:id="@+id/manufacturer"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        android:gravity="center_horizontal"
-        android:textStyle="bold"/>
+        android:layout_margin="2dp">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:textStyle="bold"
+            android:layout_marginRight="2dp"/>
+
+        <TextView
+            android:id="@+id/manufacturer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -24,7 +37,7 @@
             android:id="@+id/rssi"
             android:layout_width="72dp"
             android:layout_height="72dp"
-            android:textColor="@color/list_item"
+            android:textColor="#FFFFFF"
             android:background="#00FF00"
             android:layout_margin="2dp"
             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
@@ -34,44 +47,115 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/name"
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="2dp"/>
+                android:layout_margin="2dp">
 
-            <TextView
-                android:id="@+id/uuid"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="2dp"/>
+                <TextView
+                    android:id="@+id/uuidLabel"
+                    android:labelFor="@+id/uuid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginRight="1dp"
+                    android:textStyle="bold"
+                    android:text="UUID:"/>
+
+                <TextView
+                    android:id="@+id/uuid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/uuidLabel"
+                    android:fontFamily="sans-serif-condensed"
+                    android:text="\?"/>
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/major"
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="2dp"/>
+                    android:layout_margin="2dp">
 
-                <TextView
-                    android:id="@+id/minor"
+                    <TextView
+                        android:id="@+id/majorLabel"
+                        android:labelFor="@+id/major"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginRight="1dp"
+                        android:textStyle="bold"
+                        android:text="Major:"/>
+
+                    <TextView
+                        android:id="@+id/major"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/majorLabel"
+                        android:fontFamily="sans-serif-condensed"
+                        android:text="\?"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="2dp"/>
+                    android:layout_margin="2dp">
+
+                    <TextView
+                        android:id="@+id/minorLabel"
+                        android:labelFor="@+id/minor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginRight="1dp"
+                        android:textStyle="bold"
+                        android:text="Minor:"/>
+
+                    <TextView
+                        android:id="@+id/minor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/minorLabel"
+                        android:fontFamily="sans-serif-condensed"
+                        android:text="\?"/>
+
+                </RelativeLayout>
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tx"
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="2dp"/>
+                android:layout_margin="2dp">
+
+                <TextView
+                    android:id="@+id/txLabel"
+                    android:labelFor="@+id/tx"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginRight="1dp"
+                    android:textStyle="bold"
+                    android:text="Tx Power Level:"/>
+
+                <TextView
+                    android:id="@+id/tx"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/txLabel"
+                    android:fontFamily="sans-serif-condensed"
+                    android:text="\?"/>
+
+            </RelativeLayout>
 
         </LinearLayout>
 
