@@ -91,6 +91,11 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
     protected void onResume()
     {
         super.onResume();
+
+        if (!beaconSet.isEmpty())
+        {
+            startMessage.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -100,6 +105,17 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
         inflater.inflate(R.menu.main, menu);
         scanStartButton = menu.findItem(R.id.scanStartButton);
         scanPauseButton = menu.findItem(R.id.scanPauseButton);
+
+        if (beaconScanner.isScanning())
+        {
+            scanStartButton.setVisible(false);
+            scanPauseButton.setVisible(true);
+        }
+        else
+        {
+            scanStartButton.setVisible(true);
+            scanPauseButton.setVisible(false);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 

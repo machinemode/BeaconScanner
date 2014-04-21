@@ -17,6 +17,8 @@ import java.util.Map;
 public class BeaconAdapter extends ArrayAdapter<Beacon>
 {
     private LayoutInflater inflater;
+    private static final  String UNKNOWN_NAME = "Unknown";
+    private static final String UNKNOWN_VALUE = "?";
 
     static class ViewHolder
     {
@@ -83,10 +85,11 @@ public class BeaconAdapter extends ArrayAdapter<Beacon>
     {
         String name = beacon.getLocalName();
 
-        if (name != null && !name.isEmpty())
+        if (name == null || name.isEmpty())
         {
-            viewHolder.name.setText(name);
+            name = UNKNOWN_NAME;
         }
+        viewHolder.name.setText(name);
     }
 
     private void setManufacturerText(ViewHolder viewHolder, Beacon beacon)
@@ -98,34 +101,43 @@ public class BeaconAdapter extends ArrayAdapter<Beacon>
         String minor = manufacturerData.get(ManufacturerDataParser.AppleData.MINOR);
         String tx = manufacturerData.get(ManufacturerDataParser.AppleData.TX);
 
-        if (manufacturer != null && !manufacturer.isEmpty())
+        if (manufacturer == null || manufacturer.isEmpty())
         {
-            viewHolder.manufacturer.setText(manufacturer);
+            manufacturer = UNKNOWN_NAME;
         }
+        viewHolder.manufacturer.setText(manufacturer);
 
-        if (uuid != null && !uuid.isEmpty())
+        if (uuid == null || uuid.isEmpty())
         {
-            viewHolder.uuid.setText(uuid);
+            uuid = UNKNOWN_NAME;
         }
+        viewHolder.uuid.setText(uuid);
 
-        if (major != null && !major.isEmpty())
+        if (major == null || major.isEmpty())
         {
-            viewHolder.major.setText(major);
+            major = UNKNOWN_VALUE;
         }
+        viewHolder.major.setText(major);
 
-        if (minor != null && !minor.isEmpty())
+        if (minor == null || minor.isEmpty())
         {
-            viewHolder.minor.setText(minor);
+            minor = UNKNOWN_VALUE;
         }
+        viewHolder.minor.setText(minor);
 
-        if (tx != null && !tx.isEmpty())
+        if (tx == null || tx.isEmpty())
         {
-            viewHolder.tx.setText(tx + " dBm");
+            if (beacon.getTxPowerLevel() < 0)
+            {
+                tx = String.valueOf(beacon.getTxPowerLevel());
+            }
+            else
+            {
+                tx = UNKNOWN_VALUE;
+            }
         }
-        else if (beacon.getTxPowerLevel() < 0)
-        {
-            viewHolder.tx.setText(beacon.getTxPowerLevel() + " dBm");
-        }
+        viewHolder.tx.setText(tx + " dBm");
+
     }
 
     private void setRssiText(ViewHolder viewHolder, Beacon beacon)
