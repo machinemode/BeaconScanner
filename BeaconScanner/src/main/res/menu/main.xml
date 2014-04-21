@@ -2,8 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.machinemode.beaconscanner.ui.MainActivity" >
     
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="never" />
+    <item android:id="@+id/scanStartButton"
+        android:title="@string/start_scan"
+        android:icon="@drawable/ic_media_play"
+        android:showAsAction="ifRoom|withText" />
+
+    <item android:id="@+id/scanPauseButton"
+          android:title="@string/pause_scan"
+          android:icon="@drawable/ic_media_pause"
+          android:showAsAction="ifRoom|withText"
+          android:visible="false"/>
 </menu>

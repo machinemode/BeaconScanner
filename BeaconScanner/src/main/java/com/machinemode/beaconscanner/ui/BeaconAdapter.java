@@ -1,6 +1,7 @@
 package com.machinemode.beaconscanner.ui;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +10,8 @@ import android.widget.TextView;
 
 import com.machinemode.beaconscanner.R;
 import com.machinemode.beaconscanner.model.Beacon;
-import com.machinemode.beaconscanner.model.ResponseData;
 import com.machinemode.beaconscanner.scanner.ManufacturerDataParser;
 
-import java.util.List;
 import java.util.Map;
 
 public class BeaconAdapter extends ArrayAdapter<Beacon>
@@ -36,12 +35,22 @@ public class BeaconAdapter extends ArrayAdapter<Beacon>
         inflater = LayoutInflater.from(getContext());
     }
 
+    /**
+     * Overridden to disable clicks
+     * @param position
+     * @return false
+     */
+    @Override
+    public boolean isEnabled(int position)
+    {
+        return false;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
         ViewHolder viewHolder;
         Beacon beacon = getItem(position);
-        Map<String, String> manufacturerData = beacon.getManufacturerData();
 
         if (convertView == null)
         {
@@ -61,38 +70,106 @@ public class BeaconAdapter extends ArrayAdapter<Beacon>
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.manufacturer.setText(manufacturerData.get(ManufacturerDataParser.COMPANY_IDENTIFIER));
-        viewHolder.rssi.setText(String.valueOf(beacon.getRssi()) + " dBm");
-        viewHolder.rssi.setBackgroundColor(rssiToColor(beacon.getRssi()));
-
-        viewHolder.name.setText(beacon.getLocalName());
-        viewHolder.uuid.setText(manufacturerData.get(ManufacturerDataParser.AppleData.UUID));
-        viewHolder.major.setText(manufacturerData.get(ManufacturerDataParser.AppleData.MAJOR));
-        viewHolder.minor.setText(manufacturerData.get(ManufacturerDataParser.AppleData.MINOR));
-        viewHolder.tx.setText(manufacturerData.get(ManufacturerDataParser.AppleData.TX) + " dBm");
+        setManufacturerText(viewHolder, beacon);
+        setRssiText(viewHolder, beacon);
+        setNameText(viewHolder, beacon);
 
         //convertView.setEnabled(getItem(position).isActive());
         return convertView;
     }
 
+
+    private void setNameText(ViewHolder viewHolder, Beacon beacon)
+    {
+        String name = beacon.getLocalName();
+
+        if (name != null && !name.isEmpty())
+        {
+            viewHolder.name.setText(name);
+        }
+    }
+
+    private void setManufacturerText(ViewHolder viewHolder, Beacon beacon)
+    {
+        Map<String, String> manufacturerData = beacon.getManufacturerData();
+        String manufacturer = manufacturerData.get(ManufacturerDataParser.COMPANY_IDENTIFIER);
+        String uuid = manufacturerData.get(ManufacturerDataParser.AppleData.UUID);
+        String major = manufacturerData.get(ManufacturerDataParser.AppleData.MAJOR);
+        String minor = manufacturerData.get(ManufacturerDataParser.AppleData.MINOR);
+        String tx = manufacturerData.get(ManufacturerDataParser.AppleData.TX);
+
+        if (manufacturer != null && !manufacturer.isEmpty())
+        {
+            viewHolder.manufacturer.setText(manufacturer);
+        }
+
+        if (uuid != null && !uuid.isEmpty())
+        {
+            viewHolder.uuid.setText(uuid);
+        }
+
+        if (major != null && !major.isEmpty())
+        {
+            viewHolder.major.setText(major);
+        }
+
+        if (minor != null && !minor.isEmpty())
+        {
+            viewHolder.minor.setText(minor);
+        }
+
+        if (tx != null && !tx.isEmpty())
+        {
+            viewHolder.tx.setText(tx + " dBm");
+        }
+        else if (beacon.getTxPowerLevel() < 0)
+        {
+            viewHolder.tx.setText(beacon.getTxPowerLevel() + " dBm");
+        }
+    }
+
+    private void setRssiText(ViewHolder viewHolder, Beacon beacon)
+    {
+        int rssi = beacon.getRssi();
+
+        if (rssi < 0)
+        {
+            viewHolder.rssi.setText(String.valueOf(beacon.getRssi()) + " dBm");
+            viewHolder.rssi.setBackgroundColor(rssiToColor(beacon.getRssi()));
+        }
+        else
+        {
+            viewHolder.rssi.setBackgroundColor(Color.LTGRAY);
+        }
+    }
+
     /**
      * 0 = no rssi available
      * -1 = near, -100 = far
+     * y = mb + b
+     * approx slope (m) at 5 for 255/50 = 5.1
      * @param rssi
      * @return #aarrggbb
      */
     private int rssiToColor(int rssi)
     {
-        /*
-         red   = 0xFF00 = 65280
-         green = 0x00FF = 255
-         y = mx + b
-         m = (99/65025)
-         y = (99/65025)x + b
-         255 = (99/65025)(-1) + b
-         255 + (99/65025) = b
+        int color;
 
-         */
-        return 0xFF000000 | (((99/65025) * rssi) + (255 + (99/65025)) << 8);
+        if (rssi >= 0)
+        {
+            color = 0xFFFFFF00;
+        }
+        else if (rssi > -50)
+        {
+            int y = -5 * rssi;
+            color =  0xFF00FF00 | (y << 16);
+        }
+        else
+        {
+            int y = (5 * rssi) + 510;
+            color = 0xFFFF0000 | (y << 8);
+        }
+
+        return color;
     }
 }

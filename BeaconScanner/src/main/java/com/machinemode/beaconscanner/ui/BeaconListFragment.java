@@ -49,20 +49,6 @@ public class BeaconListFragment extends ListFragment
     }
 
     @Override
-    public void onResume()
-    {
-        super.onResume();
-        Log.d(TAG, "onResume()");
-    }
-
-    @Override
-    public void onPause()
-    {
-        super.onPause();
-        Log.d(TAG, "onPause()");
-    }
-
-    @Override
     public void onListItemClick(ListView l, View v, int position, long id)
     {
         callback.onBeaconSelected(position);

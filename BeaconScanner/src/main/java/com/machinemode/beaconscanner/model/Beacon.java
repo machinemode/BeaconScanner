@@ -19,7 +19,7 @@ public class Beacon implements Parcelable
 
     // decoded from responseData
     private List<String> flags;
-    private String localName = "unknown";
+    private String localName;
     private short txPowerLevel;
     private String serviceClassUuids;
     private Map<String, String> manufacturerData;

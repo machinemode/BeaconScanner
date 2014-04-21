@@ -55,21 +55,15 @@ public final class BeaconScanner
             return;
         }
 
-        handler.postDelayed(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                Log.d(TAG, "Scan stopped");
-                bluetoothAdapter.stopLeScan(scanCallback);
-
-                scanning = false;
-            }
-        }, SCAN_PERIOD);
-
         Log.d(TAG, "Scan started");
-
         scanning = bluetoothAdapter.startLeScan(scanCallback);
+    }
+
+    public void stop()
+    {
+        Log.d(TAG, "Scan stopped");
+        bluetoothAdapter.stopLeScan(scanCallback);
+        scanning = false;
     }
 
     public boolean isScanning()

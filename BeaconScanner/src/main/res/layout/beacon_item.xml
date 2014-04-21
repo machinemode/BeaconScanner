@@ -18,13 +18,27 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:textStyle="bold"
-            android:layout_marginRight="2dp"/>
+            android:layout_marginRight="2dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textSize="18sp"
+            android:text="@string/unknown_name"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="false"
+            android:gravity="bottom"/>
 
         <TextView
             android:id="@+id/manufacturer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"/>
+            android:layout_toRightOf="@id/name"
+            android:layout_alignParentRight="true"
+            android:gravity="bottom|right"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="@string/unknown_name"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="false"/>
 
     </RelativeLayout>
 
@@ -35,14 +49,21 @@
 
         <TextView
             android:id="@+id/rssi"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:textColor="#FFFFFF"
             android:background="#00FF00"
-            android:layout_margin="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="4dp"
             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+            android:shadowColor="#333333"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="2"
             android:gravity="center"
-            android:layout_gravity="center"/>
+            android:layout_gravity="top"
+            android:text="@string/unknown_value"/>
 
         <LinearLayout
             android:orientation="vertical"
@@ -71,7 +92,7 @@
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/uuidLabel"
                     android:fontFamily="sans-serif-condensed"
-                    android:text="\?"/>
+                    android:text="@string/unknown_value"/>
 
             </RelativeLayout>
 
@@ -101,7 +122,7 @@
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@id/majorLabel"
                         android:fontFamily="sans-serif-condensed"
-                        android:text="\?"/>
+                        android:text="@string/unknown_value"/>
 
                 </RelativeLayout>
 
@@ -126,7 +147,7 @@
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@id/minorLabel"
                         android:fontFamily="sans-serif-condensed"
-                        android:text="\?"/>
+                        android:text="@string/unknown_value"/>
 
                 </RelativeLayout>
 
@@ -153,7 +174,7 @@
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/txLabel"
                     android:fontFamily="sans-serif-condensed"
-                    android:text="\?"/>
+                    android:text="@string/unknown_value"/>
 
             </RelativeLayout>
 

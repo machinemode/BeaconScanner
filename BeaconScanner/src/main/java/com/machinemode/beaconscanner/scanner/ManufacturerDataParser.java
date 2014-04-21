@@ -44,7 +44,7 @@ public class ManufacturerDataParser
         map.put((char)	0x000B, "Silicon Wave");
         map.put((char)	0x000C, "Digianswer A/S");
         map.put((char)	0x000D, "Texas Instruments Inc.");
-        map.put((char)	0x000E, "Ceva, Inc. (formerly Parthus Technologies, Inc.)");
+        map.put((char)	0x000E, "Ceva, Inc.");
         map.put((char)	0x000F, "Broadcom Corporation");
         map.put((char)	0x0010, "Mitel Semiconductor");
         map.put((char)	0x0011, "Widcomm, Inc");
@@ -82,7 +82,7 @@ public class ManufacturerDataParser
         map.put((char)	0x0031, "Synopsis");
         map.put((char)	0x0032, "Red-M (Communications) Ltd");
         map.put((char)	0x0033, "Commil Ltd");
-        map.put((char)	0x0034, "Computer Access Technology Corporation (CATC)");
+        map.put((char)	0x0034, "Computer Access Technology Corporation");
         map.put((char)	0x0035, "Eclipse (HQ Espana) S.L.");
         map.put((char)	0x0036, "Renesas Technology Corp.");
         map.put((char)	0x0037, "Mobilian Corporation");
@@ -170,7 +170,7 @@ public class ManufacturerDataParser
         map.put((char)	0x0089, "GN ReSound A/S");
         map.put((char)	0x008A, "Jawbone");
         map.put((char)	0x008B, "Topcorn Positioning Systems, LLC");
-        map.put((char)	0x008C, "Qualcomm Retail Solutions, Inc. (formerly Qualcomm Labs, Inc.)");
+        map.put((char)	0x008C, "Qualcomm Retail Solutions, Inc.");
         map.put((char)	0x008D, "Zscan Software");
         map.put((char)	0x008E, "Quintic Corp.");
         map.put((char)	0x008F, "Stollman E+V GmbH");
@@ -272,7 +272,7 @@ public class ManufacturerDataParser
         map.put((char)	0x00EF, "Bitsplitters GmbH");
         map.put((char)	0x00F0, "PayPal, Inc.");
         map.put((char)	0x00F1, "Witron Technology Limited");
-        map.put((char)	0x00F2, "Aether Things Inc. (formerly Morse Project Inc.)");
+        map.put((char)	0x00F2, "Aether Things Inc.");
         map.put((char)	0x00F3, "Kent Displays Inc.");
         map.put((char)	0x00F4, "Nautilus Inc.");
         map.put((char)	0x00F5, "Smartifier Oy");

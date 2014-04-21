@@ -4,21 +4,52 @@
     android:layout_height="match_parent"
     tools:context="com.machinemode.beaconscanner.ui.MainActivity" >
 
-    <fragment
-        android:id="@+id/beacon_list"
-        android:name="com.machinemode.beaconscanner.ui.BeaconListFragment"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:layout="@android:layout/list_content"
+        android:orientation="vertical"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/scanButton"/>
+        android:layout_above="@+id/adView">
 
-    <Button
-        android:id="@+id/scanButton"
-        android:text="@string/scan_button"
-        android:layout_width="match_parent"
+        <fragment
+            android:id="@+id/beacon_list"
+            android:name="com.machinemode.beaconscanner.ui.BeaconListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout="@android:layout/list_content"/>
+
+        <FrameLayout
+            android:id="@+id/progressBarWrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_gravity="center_horizontal">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                style="@android:style/Widget.ProgressBar.Small"
+                android:visibility="invisible" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/startMessage"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerInParent="true"
+        android:text="@string/start_message"/>
+
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        ads:adUnitId="ca-app-pub-2850372816958768/7576043335"
+        ads:adSize="SMART_BANNER"
+        android:layout_alignParentBottom="true"/>
+
 </RelativeLayout>
