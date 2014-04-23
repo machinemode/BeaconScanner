@@ -169,17 +169,17 @@ public class BeaconAdapter extends ArrayAdapter<Beacon>
 
         if (rssi >= 0)
         {
-            color = 0xFFFFFF00;
+            color = 0xFFCCCCCC;
         }
         else if (rssi > -50)
         {
             int y = -5 * rssi;
-            color =  0xFF00FF00 | (y << 16);
+            color =  0xFFFF0000 | (char)y;
         }
         else
         {
             int y = (5 * rssi) + 510;
-            color = 0xFFFF0000 | (y << 8);
+            color = 0xFF0000FF | (y << 16);
         }
 
         return color;

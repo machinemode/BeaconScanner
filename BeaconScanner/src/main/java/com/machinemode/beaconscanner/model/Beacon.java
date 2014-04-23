@@ -2,9 +2,11 @@ package com.machinemode.beaconscanner.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.machinemode.beaconscanner.scanner.GapParser;
 import com.machinemode.beaconscanner.scanner.ManufacturerDataParser;
+import com.machinemode.beaconscanner.util.ByteConverter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -54,6 +56,8 @@ public class Beacon implements Parcelable
         source.readTypedList(responseDataList, ResponseData.CREATOR);
         rssi = source.readInt();
         active = source.readByte() != 0;
+        Log.d("Beacon", "read Parcel: " + getLocalName() + " rssi = " + rssi);
+        Log.d("Beacon", "scanRecord: " + ByteConverter.toHex(scanRecord));
     }
 
     public byte[] getScanRecord()
@@ -144,6 +148,8 @@ public class Beacon implements Parcelable
         dest.writeTypedList(responseDataList);
         dest.writeInt(rssi);
         dest.writeByte((byte)(active ? 1 : 0));
+        Log.d("Beacon", "writeToParcel(): " + getLocalName() + " rssi = " + rssi);
+        Log.d("Beacon", "scanRecord: " + ByteConverter.toHex(scanRecord));
     }
 
     @Override

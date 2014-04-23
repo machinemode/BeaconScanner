@@ -56,14 +56,22 @@ public final class BeaconScanner
         }
 
         Log.d(TAG, "Scan started");
+        //bluetoothAdapter.enable();
         scanning = bluetoothAdapter.startLeScan(scanCallback);
     }
 
     public void stop()
     {
         Log.d(TAG, "Scan stopped");
-        bluetoothAdapter.stopLeScan(scanCallback);
+
+        if (bluetoothAdapter != null)
+        {
+            bluetoothAdapter.stopLeScan(scanCallback);
+        }
+
+        //bluetoothAdapter.disable();
         scanning = false;
+
     }
 
     public boolean isScanning()
