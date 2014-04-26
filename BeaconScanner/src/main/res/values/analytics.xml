@@ -10,6 +10,4 @@
     <!--Enable automatic exception tracking-->
     <bool name="ga_reportUncaughtExceptions">true</bool>
 
-    <!-- Remove in release -->
-    <string name="ga_logLevel">verbose</string>
 </resources>
