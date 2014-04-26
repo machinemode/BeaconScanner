@@ -35,6 +35,8 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
     private Set<Beacon> beaconSet = new LinkedHashSet<Beacon>();
     private BeaconScanner beaconScanner;
 
+    // TODO: Need a way to expire beacons
+    
     // GA
     private EasyTracker easyTracker;
 
@@ -55,7 +57,7 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
 
         super.onCreate(savedInstanceState);
         easyTracker = EasyTracker.getInstance(this);
-        beaconAdapter = new BeaconAdapter(this, 0);
+        beaconAdapter = new BeaconAdapter(this, beaconSet);
         beaconScanner = new BeaconScanner(this);
         bindViews();
 
@@ -68,7 +70,6 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
         {
             List<Beacon> beaconList = savedInstanceState.getParcelableArrayList("beacons");
             beaconSet.addAll(beaconList);
-            beaconAdapter.addAll(beaconSet);
         }
     }
 
@@ -145,7 +146,6 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
     @Override
     protected void onSaveInstanceState(Bundle outState)
     {
-        // TODO: Ensure correct scan state and progress indicator visibility
         ArrayList<Beacon> beaconList = new ArrayList<Beacon>(beaconSet);
         outState.putParcelableArrayList("beacons", beaconList);
         super.onSaveInstanceState(outState);
@@ -175,8 +175,7 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
             @Override
             public void run()
             {
-                beaconAdapter.clear();
-                beaconAdapter.addAll(beaconSet);
+                beaconAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -204,8 +203,8 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
         if (adView != null)
         {
             AdRequest adRequest = new AdRequest.Builder()
-                    .addTestDevice("DA5575284CBEDCEF52663C8C3A6D9180")
-                    .addTestDevice("3EF105D59DC841A646B43EA3F9F1B581")
+                    //.addTestDevice("DA5575284CBEDCEF52663C8C3A6D9180")
+                    //.addTestDevice("3EF105D59DC841A646B43EA3F9F1B581")
                     .build();
             adView.loadAd(adRequest);
         }

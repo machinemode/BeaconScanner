@@ -5,16 +5,17 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.machinemode.beaconscanner.R;
 import com.machinemode.beaconscanner.model.Beacon;
 import com.machinemode.beaconscanner.scanner.ManufacturerDataParser;
+import com.machinemode.beaconscanner.widget.SetAdapter;
 
 import java.util.Map;
+import java.util.Set;
 
-public class BeaconAdapter extends ArrayAdapter<Beacon>
+public class BeaconAdapter extends SetAdapter<Beacon>
 {
     private LayoutInflater inflater;
     private static final  String UNKNOWN_NAME = "Unknown";
@@ -31,10 +32,10 @@ public class BeaconAdapter extends ArrayAdapter<Beacon>
         TextView tx;
     }
 
-    public BeaconAdapter(Context context, int resource)
+    public BeaconAdapter(Context context, Set<Beacon> set)
     {
-        super(context, resource);
-        inflater = LayoutInflater.from(getContext());
+        super(set);
+        inflater = LayoutInflater.from(context);
     }
 
     /**
@@ -52,7 +53,7 @@ public class BeaconAdapter extends ArrayAdapter<Beacon>
     public View getView(int position, View convertView, ViewGroup parent)
     {
         ViewHolder viewHolder;
-        Beacon beacon = getItem(position);
+        Beacon beacon = (Beacon)getItem(position);
 
         if (convertView == null)
         {
@@ -144,14 +145,14 @@ public class BeaconAdapter extends ArrayAdapter<Beacon>
     {
         int rssi = beacon.getRssi();
 
-        if (rssi < 0)
+        if (rssi > 0 || !beacon.isActive())
         {
-            viewHolder.rssi.setText(String.valueOf(beacon.getRssi()) + " dBm");
-            viewHolder.rssi.setBackgroundColor(rssiToColor(beacon.getRssi()));
+            viewHolder.rssi.setBackgroundColor(Color.LTGRAY);
         }
         else
         {
-            viewHolder.rssi.setBackgroundColor(Color.LTGRAY);
+            viewHolder.rssi.setText(String.valueOf(beacon.getRssi()) + " dBm");
+            viewHolder.rssi.setBackgroundColor(rssiToColor(beacon.getRssi()));
         }
     }
 

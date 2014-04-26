@@ -1,7 +1,5 @@
 package com.machinemode.beaconscanner.scanner;
 
-import android.util.Log;
-
 import com.machinemode.beaconscanner.model.ResponseData;
 import com.machinemode.beaconscanner.util.ByteConverter;
 
