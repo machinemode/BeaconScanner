@@ -145,6 +145,11 @@ public class BeaconAdapter extends SetAdapter<Beacon>
     {
         int rssi = beacon.getRssi();
 
+        if (System.currentTimeMillis() > beacon.getTimestamp() + 2000)
+        {
+            beacon.setActive(false);
+        }
+
         if (rssi > 0 || !beacon.isActive())
         {
             viewHolder.rssi.setBackgroundColor(Color.LTGRAY);

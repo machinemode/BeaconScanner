@@ -18,6 +18,7 @@ public class Beacon implements Parcelable
     private List<ResponseData> responseDataList;
     private int rssi;
     private boolean active;
+    private long timestamp;
 
     // decoded from responseData
     private List<String> flags;
@@ -82,7 +83,13 @@ public class Beacon implements Parcelable
 
     public void setActive(boolean active)
     {
+        this.timestamp = System.currentTimeMillis();
         this.active = active;
+    }
+
+    public long getTimestamp()
+    {
+        return timestamp;
     }
 
     public List<String> getFlags()
