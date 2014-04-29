@@ -16,6 +16,7 @@ import android.widget.Toast;
 import android.os.StrictMode;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.MapBuilder;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.machinemode.beaconscanner.BuildConfig;
@@ -126,9 +127,11 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
         switch (item.getItemId())
         {
             case R.id.scanStartButton:
+                easyTracker.send(MapBuilder.createEvent("ui_action", "start_scan", null, null).build());
                 startScan();
                 return true;
             case R.id.scanPauseButton:
+                easyTracker.send(MapBuilder.createEvent("ui_action", "stop_scan", null, null).build());
                 stopScan();
                 return true;
             default:
@@ -141,6 +144,7 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
     {
         if (requestCode == ENABLE_BT_REQUEST && resultCode == RESULT_OK)
         {
+            easyTracker.send(MapBuilder.createEvent("bt", "enabled", null, (long)requestCode).build());
             startScan();
         }
     }
@@ -206,6 +210,7 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
 
         if (adView != null)
         {
+            easyTracker.send(MapBuilder.createEvent("ad", "load", null, null).build());
             AdRequest adRequest = new AdRequest.Builder()
                     //.addTestDevice("DA5575284CBEDCEF52663C8C3A6D9180")
                     //.addTestDevice("3EF105D59DC841A646B43EA3F9F1B581")
@@ -237,6 +242,7 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
                     beacon.setActive(false);
                 }
 
+                easyTracker.send(MapBuilder.createEvent("scan", "start", null, null).build());
                 if (beaconScanner.scan())
                 {
                     scanStartButton.setVisible(false);
@@ -249,6 +255,7 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
 
     private void stopScan()
     {
+        easyTracker.send(MapBuilder.createEvent("scan", "stop", null, null).build());
         scanStartButton.setVisible(true);
         scanPauseButton.setVisible(false);
         progressBar.setVisibility(View.INVISIBLE);
