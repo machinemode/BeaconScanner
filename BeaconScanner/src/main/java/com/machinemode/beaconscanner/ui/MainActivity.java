@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,6 +22,7 @@ import com.machinemode.beaconscanner.BuildConfig;
 import com.machinemode.beaconscanner.R;
 import com.machinemode.beaconscanner.model.Beacon;
 import com.machinemode.beaconscanner.scanner.BeaconScanner;
+import com.machinemode.beaconscanner.util.ByteConverter;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -154,27 +156,29 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
     @Override
     public void onLeScan(final BluetoothDevice device, final int rssi, final byte[] scanRecord)
     {
-        Beacon foundBeacon = new Beacon(scanRecord, rssi);
-        scanResults.add(foundBeacon);
+        final Beacon foundBeacon = new Beacon(scanRecord, rssi);
+        Log.d("Beacon Scout", ByteConverter.toHex(scanRecord));
 
-        if (!beaconSet.add(foundBeacon))
-        {
-            for (Beacon beacon : beaconSet)
-            {
-                if (foundBeacon.equals(beacon))
-                {
-                    beacon.setRssi(foundBeacon.getRssi());
-                    beacon.setActive(true);
-                    break;
-                }
-            }
-        }
+        scanResults.add(foundBeacon);
 
         runOnUiThread(new Runnable()
         {
             @Override
             public void run()
             {
+                if (!beaconSet.add(foundBeacon))
+                {
+                    for (Beacon beacon : beaconSet)
+                    {
+                        if (foundBeacon.equals(beacon))
+                        {
+                            beacon.setRssi(foundBeacon.getRssi());
+                            beacon.setActive(true);
+                            break;
+                        }
+                    }
+                }
+
                 beaconAdapter.notifyDataSetChanged();
             }
         });
