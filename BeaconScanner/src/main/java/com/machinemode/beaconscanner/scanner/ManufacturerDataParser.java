@@ -403,7 +403,7 @@ public class ManufacturerDataParser
     {
         Map<String, String> map = new HashMap<String, String>();
 
-        if (data.length == 23)
+        if (data.length >= 23)
         {
             map.put(AppleData.BYTE0, ByteConverter.toHex(data[0]));
             map.put(AppleData.BYTE1, ByteConverter.toHex(data[1]));

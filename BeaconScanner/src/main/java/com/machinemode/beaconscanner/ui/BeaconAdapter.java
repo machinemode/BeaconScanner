@@ -145,6 +145,7 @@ public class BeaconAdapter extends SetAdapter<Beacon>
     {
         int rssi = beacon.getRssi();
 
+        // TODO: Remove as it does nothing when no new beacons are found (when adapter set changes)
         if (System.currentTimeMillis() > beacon.getTimestamp() + 2000)
         {
             beacon.setActive(false);
@@ -156,7 +157,7 @@ public class BeaconAdapter extends SetAdapter<Beacon>
         }
         else
         {
-            viewHolder.rssi.setText(String.valueOf(beacon.getRssi()) + " dBm");
+            viewHolder.rssi.setText(String.valueOf(beacon.getRssi()) + "\ndBm");
             viewHolder.rssi.setBackgroundColor(rssiToColor(beacon.getRssi()));
         }
     }

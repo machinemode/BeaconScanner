@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends Activity implements BluetoothAdapter.LeScanCallback,
                                                       BeaconListFragment.OnBeaconSelectedListener
@@ -38,8 +40,9 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
     private Set<Beacon> beaconSet = new LinkedHashSet<Beacon>();
     private BeaconScanner beaconScanner;
 
-    // TODO: Need a way to expire beacons
-    
+    // Timer to expire beacons
+    private Timer timer = new Timer(true);
+
     // GA
     private EasyTracker easyTracker;
 
@@ -248,6 +251,7 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
                     scanStartButton.setVisible(false);
                     scanPauseButton.setVisible(true);
                     progressBar.setVisibility(View.VISIBLE);
+                    timer.schedule(new UiTimerTask(), 2000, 2000);
                 }
             }
         }
@@ -260,6 +264,7 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
         scanPauseButton.setVisible(false);
         progressBar.setVisibility(View.INVISIBLE);
         beaconScanner.stop();
+        timer.cancel();
     }
 
     private void enableStrictMode()
@@ -272,5 +277,20 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
                                        .detectAll()
                                        .penaltyLog()
                                        .build());
+    }
+
+    private class UiTimerTask extends TimerTask
+    {
+        @Override
+        public void run()
+        {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run()
+                {
+                    beaconAdapter.notifyDataSetChanged();
+                }
+            });
+        }
     }
 }

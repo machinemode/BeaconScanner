@@ -9,6 +9,7 @@ import com.machinemode.beaconscanner.scanner.ManufacturerDataParser;
 import com.machinemode.beaconscanner.util.ByteConverter;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +26,7 @@ public class Beacon implements Parcelable
     private String localName;
     private short txPowerLevel;
     private String serviceClassUuids;
-    private Map<String, String> manufacturerData;
+    private Map<String, String> manufacturerData = new HashMap<String, String>();
 
     private static final Creator<Beacon> CREATOR = new Creator<Beacon>()
     {

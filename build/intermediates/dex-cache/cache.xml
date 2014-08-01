@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pre-dex-items>
+
+    <item
+        dex="/Users/cesar/AndroidStudioProjects/BeaconScanner/BeaconScanner/build/intermediates/pre-dexed/release/libGoogleAnalyticsServices-e1df8b15f015c4d4185930e9237dddff472712e3.jar"
+        jar="/Users/cesar/AndroidStudioProjects/BeaconScanner/BeaconScanner/libs/libGoogleAnalyticsServices.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="e887c6c9b31b39a39b0eaba981448b78902ea813"/>
+    <item
+        dex="/Users/cesar/AndroidStudioProjects/BeaconScanner/BeaconScanner/build/intermediates/pre-dexed/release/support-annotations-20.0.0-bca9cd8c8082330ef7549e0398af852faae531fd.jar"
+        jar="/Applications/Android Studio.app/sdk/extras/android/m2repository/com/android/support/support-annotations/20.0.0/support-annotations-20.0.0.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="9d9013e9ff35fc3756411e62873c363c70c638fa"/>
+    <item
+        dex="/Users/cesar/AndroidStudioProjects/BeaconScanner/BeaconScanner/build/intermediates/pre-dexed/release/classes-3b7e600e8149e6339ca87745c1ccfcace8884a68.jar"
+        jar="/Users/cesar/AndroidStudioProjects/BeaconScanner/BeaconScanner/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/classes.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="f21927d22fe31889ecce94dd697a2e75b137e0ef"/>
+    <item
+        dex="/Users/cesar/AndroidStudioProjects/BeaconScanner/BeaconScanner/build/intermediates/pre-dexed/release/classes-01008f6c641940ef9a737cbd2b3d7d3f0fa4cf1e.jar"
+        jar="/Users/cesar/AndroidStudioProjects/BeaconScanner/BeaconScanner/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/classes.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="8694693636ab36910c8100ce527c258ff3ebece0"/>
+    <item
+        dex="/Users/cesar/AndroidStudioProjects/BeaconScanner/BeaconScanner/build/intermediates/pre-dexed/release/classes-36578b014d9eef15bb1f660ac14227fe3de7c3cb.jar"
+        jar="/Users/cesar/AndroidStudioProjects/BeaconScanner/BeaconScanner/build/intermediates/exploded-aar/com.google.android.gms/play-services/5.0.77/classes.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="b6a82434c1eca686607867cd906bcc80ed987837"/>
+    <item
+        dex="/Users/cesar/AndroidStudioProjects/BeaconScanner/BeaconScanner/build/intermediates/pre-dexed/release/internal_impl-20.0.0-d16b0d9d9df1c4aa550381cd257530b7f6234d07.jar"
+        jar="/Users/cesar/AndroidStudioProjects/BeaconScanner/BeaconScanner/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/libs/internal_impl-20.0.0.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="e40b3078e3fbd353c9f44da8df25a8fc0078209d"/>
+
+</pre-dex-items>
