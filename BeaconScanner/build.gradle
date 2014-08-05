@@ -29,13 +29,17 @@ dependencies {
 }
 
 def Properties signingProperties = new Properties()
-def signingPropertiesFile =  file(System.getProperty('user.home') + '/Machinemode/signing.properties')
+def propertiesPath = System.getProperty('user.home') + '/Machinemode/'
+def signingPropertiesFile =  file(propertiesPath + 'signing.properties')
+
+println 'Using signing properties found in ' + propertiesPath
 
 if (signingPropertiesFile.canRead()) {
     signingProperties.load(new FileInputStream(signingPropertiesFile))
 
     if (signingProperties && signingProperties['storeFile']) {
-        android.signingConfigs.release.storeFile = file(signingProperties['storeFile'])
+        println 'Using keystore found in ' + propertiesPath + signingProperties['storeFile']
+        android.signingConfigs.release.storeFile = file(propertiesPath + signingProperties['storeFile'])
         android.signingConfigs.release.storePassword = signingProperties['storePassword']
         android.signingConfigs.release.keyAlias = signingProperties['keyAlias']
         android.signingConfigs.release.keyPassword = signingProperties['keyPassword']
