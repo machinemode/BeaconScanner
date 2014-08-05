@@ -10,7 +10,6 @@ import android.util.Log;
 public final class BeaconScanner
 {
     private static final String TAG = BeaconScanner.class.getSimpleName();
-    private static final long SCAN_PERIOD = 10000;
 
     private final BluetoothManager bluetoothManager;
     private BluetoothAdapter bluetoothAdapter;
@@ -56,7 +55,6 @@ public final class BeaconScanner
         }
 
         Log.d(TAG, "Scan started");
-        //bluetoothAdapter.enable();
         scanning = bluetoothAdapter.startLeScan(scanCallback);
         return scanning;
     }
@@ -65,7 +63,6 @@ public final class BeaconScanner
     {
         Log.d(TAG, "Scan stopped");
         bluetoothAdapter.stopLeScan(scanCallback);
-        //bluetoothAdapter.disable();
         scanning = false;
     }
 

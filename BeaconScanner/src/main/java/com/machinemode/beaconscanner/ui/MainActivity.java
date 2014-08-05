@@ -41,7 +41,7 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
     private BeaconScanner beaconScanner;
 
     // Timer to expire beacons
-    private Timer timer = new Timer(true);
+    private Timer displayRefeshTimer = new Timer(true);
 
     // GA
     private EasyTracker easyTracker;
@@ -168,27 +168,18 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
 
         scanResults.add(foundBeacon);
 
-        runOnUiThread(new Runnable()
+        if (!beaconSet.add(foundBeacon))
         {
-            @Override
-            public void run()
+            for (Beacon beacon : beaconSet)
             {
-                if (!beaconSet.add(foundBeacon))
+                if (foundBeacon.equals(beacon))
                 {
-                    for (Beacon beacon : beaconSet)
-                    {
-                        if (foundBeacon.equals(beacon))
-                        {
-                            beacon.setRssi(foundBeacon.getRssi());
-                            beacon.setActive(true);
-                            break;
-                        }
-                    }
+                    beacon.setRssi(foundBeacon.getRssi());
+                    beacon.setActive(true);
+                    break;
                 }
-
-                beaconAdapter.notifyDataSetChanged();
             }
-        });
+        }
     }
 
     @Override
@@ -251,7 +242,7 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
                     scanStartButton.setVisible(false);
                     scanPauseButton.setVisible(true);
                     progressBar.setVisibility(View.VISIBLE);
-                    timer.schedule(new UiTimerTask(), 2000, 2000);
+                    displayRefeshTimer.schedule(new UiTimerTask(), 1000, 1000);
                 }
             }
         }
@@ -264,7 +255,7 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
         scanPauseButton.setVisible(false);
         progressBar.setVisibility(View.INVISIBLE);
         beaconScanner.stop();
-        timer.cancel();
+        displayRefeshTimer.cancel();
     }
 
     private void enableStrictMode()
