@@ -40,8 +40,8 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
     private Set<Beacon> beaconSet = new LinkedHashSet<Beacon>();
     private BeaconScanner beaconScanner;
 
-    // Timer to expire beacons
-    private Timer displayRefeshTimer = new Timer(true);
+    // Timer to refresh beacon readings
+    private Timer displayRefeshTimer;
 
     // GA
     private EasyTracker easyTracker;
@@ -242,7 +242,8 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
                     scanStartButton.setVisible(false);
                     scanPauseButton.setVisible(true);
                     progressBar.setVisibility(View.VISIBLE);
-                    displayRefeshTimer.schedule(new UiTimerTask(), 1000, 1000);
+                    displayRefeshTimer = new Timer(true);
+                    displayRefeshTimer.schedule(new UiTimerTask(), 500, 500);
                 }
             }
         }

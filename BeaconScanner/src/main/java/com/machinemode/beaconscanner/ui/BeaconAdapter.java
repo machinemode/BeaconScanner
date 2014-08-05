@@ -20,6 +20,7 @@ public class BeaconAdapter extends SetAdapter<Beacon>
     private LayoutInflater inflater;
     private static final  String UNKNOWN_NAME = "Unknown";
     private static final String UNKNOWN_VALUE = "?";
+    private static final int RSSI_SLOPE = 255/99;
 
     static class ViewHolder
     {
@@ -145,7 +146,6 @@ public class BeaconAdapter extends SetAdapter<Beacon>
     {
         int rssi = beacon.getRssi();
 
-        // TODO: Remove as it does nothing when no new beacons are found (when adapter set changes)
         if (System.currentTimeMillis() > beacon.getTimestamp() + 2000)
         {
             beacon.setActive(false);
@@ -165,8 +165,7 @@ public class BeaconAdapter extends SetAdapter<Beacon>
     /**
      * 0 = no rssi available
      * -1 = near, -100 = far
-     * y = mb + b
-     * approx slope (m) at 5 for 255/50 = 5.1
+     * y = mx + b
      * @param rssi
      * @return #aarrggbb
      */
@@ -178,15 +177,13 @@ public class BeaconAdapter extends SetAdapter<Beacon>
         {
             color = 0xFFCCCCCC;
         }
-        else if (rssi > -50)
-        {
-            int y = -5 * rssi;
-            color =  0xFFFF0000 | (char)y;
-        }
         else
         {
-            int y = (5 * rssi) + 510;
-            color = 0xFF0000FF | (y << 16);
+            int mx = RSSI_SLOPE * rssi;
+            int r = mx + 255;
+            int b = -mx - RSSI_SLOPE;
+            color = 0xFF000000 | (r << 16);
+            color |= (char)b;
         }
 
         return color;
